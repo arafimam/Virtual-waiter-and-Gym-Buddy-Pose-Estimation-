@@ -14,3 +14,5 @@ To run this:
 2) open Python IDE (python 3.0+)
 3) Download packages: opencv-python, numpy and mediapipe
 4) press run
+
+Future plans: to add a counter that will count the number of times hand were raised
