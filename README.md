@@ -8,3 +8,9 @@ Landmarks were extracted and the angles between left_hip, left_shoulder and left
 
 ![Screenshot (917)](https://user-images.githubusercontent.com/86128944/127777678-a6be2974-14c1-4220-b34a-d40a7ee18aa8.png)
 
+This program will also work for any computer video by changing the .VideoCapture argument from 0 to the name of the video, ensuring the directory of the video is same as the directory of the project. 
+To run this: 
+1) Clone the video
+2) open Python IDE (python 3.0+)
+3) Download packages: opencv-python, numpy and mediapipe
+4) press run
