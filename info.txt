@@ -1,0 +1,21 @@
+to extract all landmarks:
+    try:
+        landmarks = results.pose_landmarks.landmark
+        print(landmarks)
+^^the print will show us the cordinate of each landmark on our body and their connections
+
+to find the index position of the landmarks:
+    print(mpPOSE.PoseLandmark.<name_of_landmark>.value)
+^^this will print the landmark index position
+
+to extract a particular landmark:
+    landmarks[mpPOSE.PoseLandmark.<name_of_landmark>]
+    example: landmarks[mpPOSE.PoseLandmark.LEFT_SHOULDER]
+
+^^this will give the cordinates of the landmark
+    to check a particular cordinate:
+    landmarks[mpPOSE.PoseLandmark.<name_of_landmark>.value].x/y/z
+
+
+Calculating angles:
+
