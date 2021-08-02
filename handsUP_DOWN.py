@@ -3,6 +3,7 @@ import cv2 as cv
 import numpy as np
 
 
+
 # function find angle:
 def calculate_angle(a, b, c):
     a = np.array(a)  # First
@@ -17,7 +18,6 @@ def calculate_angle(a, b, c):
 
     return angle
 
-
 # create VideoCapture object for webcam
 capture = cv.VideoCapture(0)
 
@@ -28,9 +28,15 @@ mpPose = mp.solutions.pose
 mpDrawing = mp.solutions.drawing_utils
 
 # define state of hand
-hand_state=None
+hand_state = None
+count=0
+
+print('Welcome to our virtual restruraunt')
+print('Menu:'+'\n'+'Hot dog'+'\n'+'pizza'+'\n'+'burger')
+text= input("Type what you want to order")
 
 with mpPose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
+
     while capture.isOpened():
         ret, frame = capture.read()
         # convert image to RGB
@@ -46,43 +52,40 @@ with mpPose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as p
         try:
             landmarks = results.pose_landmarks.landmark
             # find x and y coordinate of 3 landmarks--for left side
-            left_hip = [landmarks[mpPose.PoseLandmark.LEFT_HIP.value].x, landmarks[mpPose.PoseLandmark.LEFT_HIP.value].y]
+            left_hip = [landmarks[mpPose.PoseLandmark.LEFT_HIP.value].x,
+                        landmarks[mpPose.PoseLandmark.LEFT_HIP.value].y]
             left_shoulder = [landmarks[mpPose.PoseLandmark.LEFT_SHOULDER.value].x,
-                        landmarks[mpPose.PoseLandmark.LEFT_SHOULDER.value].y]
+                             landmarks[mpPose.PoseLandmark.LEFT_SHOULDER.value].y]
             left_elbow = [landmarks[mpPose.PoseLandmark.LEFT_ELBOW.value].x,
-                     landmarks[mpPose.PoseLandmark.LEFT_ELBOW.value].y]
-
-            # find x and y coordinate of 3 landmarks--for right side
-
-
-
+                          landmarks[mpPose.PoseLandmark.LEFT_ELBOW.value].y]
 
             # compute angle
-            angle_left= calculate_angle(left_hip, left_shoulder, left_elbow)
-
+            angle_left = calculate_angle(left_hip, left_shoulder, left_elbow)
 
             cv.putText(image, str(angle_left),
                        tuple(np.multiply(left_shoulder, [640, 480]).astype(int)),
                        cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 139), 2, cv.LINE_AA
                        )
 
-
-            if angle_left>90 :
-                hand_state='Hands up'
-            if angle_left<90 :
-                hand_state='Hands down'
-
-
-
+            if angle_left >= 90:
+                hand_state='you ordered:'+text
+            if angle_left < 20:
+                hand_state = 'Please raise hand so that we can find you'
+            if angle_left >= 20 and angle_left < 90 and hand_state == 'Please raise hand so that we can find you':
+                hand_state = "your left hand is moving up"
+            if angle_left >= 20 and angle_left < 90 and hand_state == 'you ordered:'+text:
+                hand_state = "We found you. Thanks!"
 
         except:
             pass
 
-        cv.putText(image, 'State of Hands: ', (15, 12),
-                   cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 139), 1, cv.LINE_AA)
+        # GUI VISUALS and OPERATIONS
+        cv.rectangle(image, (0, 0), (700, 100), (245, 117, 16), -1)
+        cv.putText(image, 'Virtual waiter: ', (15, 25),
+                   cv.FONT_HERSHEY_SIMPLEX, 1, (0, 150, 200), 2, cv.LINE_AA)
         cv.putText(image, hand_state,
                    (60, 60),
-                   cv.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 139), 2, cv.LINE_AA)
+                   cv.FONT_HERSHEY_SIMPLEX, 0.75, (0, 150, 200), 2, cv.LINE_AA)
         mpDrawing.draw_landmarks(image, results.pose_landmarks, mpPose.POSE_CONNECTIONS)
 
         cv.imshow("POSE_GUESS", image)

@@ -17,5 +17,11 @@ to extract a particular landmark:
     landmarks[mpPOSE.PoseLandmark.<name_of_landmark>.value].x/y/z
 
 
-Calculating angles:
+------------------Speech recognition: future implementation------------------------
+The primary purpose of a Recognizer instance is, of course, to recognize speech.
+Each instance comes with a variety of settings and functionality for recognizing speech from an audio source.
+
+Recognizer class require an audio_data argument.In each case, audio_data must be an instance of SpeechRecognition’s AudioData class.
+Noise is a fact of life. All audio recordings have some degree of noise in them,
+and un-handled noise can wreck the accuracy of speech recognition apps.
 
