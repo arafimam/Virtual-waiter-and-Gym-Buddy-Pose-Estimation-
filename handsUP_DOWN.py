@@ -1,6 +1,7 @@
 import mediapipe as mp
 import cv2 as cv
 import numpy as np
+import time
 
 
 
@@ -34,6 +35,16 @@ count=0
 print('Welcome to our virtual restruraunt')
 print('Menu:'+'\n'+'Hot dog'+'\n'+'pizza'+'\n'+'burger')
 text= input("Type what you want to order")
+total_time=10
+i=0
+print("Please wait for 10 seconds until virtual waiter comes \n")
+while i  != total_time:
+
+    print(i+1)
+    print('seconds')
+    time.sleep(1)
+    i=i+1
+
 
 with mpPose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
 
@@ -69,12 +80,14 @@ with mpPose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as p
 
             if angle_left >= 90:
                 hand_state='you ordered:'+text
-            if angle_left < 20:
+            if angle_left < 20 and hand_state==None:
                 hand_state = 'Please raise hand so that we can find you'
             if angle_left >= 20 and angle_left < 90 and hand_state == 'Please raise hand so that we can find you':
                 hand_state = "your left hand is moving up"
             if angle_left >= 20 and angle_left < 90 and hand_state == 'you ordered:'+text:
                 hand_state = "We found you. Thanks!"
+            if angle_left<20 and hand_state=="We found you. Thanks!":
+                hand_state="Waiter will be here with you soon"
 
         except:
             pass
